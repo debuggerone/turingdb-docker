@@ -22,14 +22,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /build
 
-# Clone inkl. Submodules
+# clone incl. submodules
 RUN git clone --recursive https://github.com/turing-db/turingdb.git
 WORKDIR /build/turingdb
 
-# Dependencies-Script (falls benötigt)
-RUN ./dependencies.sh
+# RUN ./dependencies.sh
 
-# Build
+# build
 RUN mkdir -p build && cd build && \
     cmake .. \
       -DCMAKE_BUILD_TYPE=Release \
@@ -44,7 +43,6 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Nur Runtime-Abhängigkeiten
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libssl3 \
     libcurl4 \
@@ -52,18 +50,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Optional: Non-root User (empfohlen für Prod)
+# optional: Non-root User (empfohlen für Prod)
 RUN useradd -m turingdb
 
 WORKDIR /data
 
-# Binary übernehmen
+# copy binary 
 COPY --from=builder /usr/local/bin/turingdb /usr/local/bin/turingdb
 
-# Ports
+# ports
 EXPOSE 6666
 
 USER turingdb
 
-# Sauberes Signal-Handling
+# clean signal-handling
 ENTRYPOINT ["turingdb"]
