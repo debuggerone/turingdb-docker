@@ -50,7 +50,7 @@ This Docker image focuses on running TuringDB **unchanged**, exactly as upstream
 
 ### 1. Prepare a data directory
 
-TuringDB requires a writable directory for its internal state.
+TuringDB requires a writable directory for its internal state. <<<<<
 
 ```bash
 mkdir -p turing-data
@@ -62,13 +62,12 @@ sudo chown -R "$(id -u)":"$(id -g)" turing-data
 ### 2. Run TuringDB in Docker
 
 ```bash
-docker run -it --name turingdb-test \
+docker run -it \
   -p 6666:6666 \
   --ulimit memlock=-1 \
   --shm-size=2g \
   -v "$(pwd)/turing-data:/data" \
-  --entrypoint /usr/local/bin/turingdb \
-  debuggerone:turingdb-ubuntu2204-cpu \
+  debuggerone/turingdb-ubuntu2204-cpu:1.0 \
   -p 6666 -i 0.0.0.0 -turing-dir /data
 ```
 
